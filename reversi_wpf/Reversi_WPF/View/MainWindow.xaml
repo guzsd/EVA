@@ -1,0 +1,119 @@
+﻿<Window x:Class="Reversi_WPF.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Reversi_WPF.View"
+        mc:Ignorable="d"
+        Title="Reversi" Top="50" Left="50" Height="800" Width="650">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <Menu Grid.Row="0">
+            <MenuItem Header="Game">
+                <MenuItem Header="New" Command="{Binding NewGameCommand}" />
+                <MenuItem Header="Save" Command="{Binding SaveGameCommand}" IsEnabled="{Binding SaveMenuItemEnabled}" />
+                <MenuItem Header="Load" Command="{Binding LoadGameCommand}" />
+                <MenuItem Header="Exit" Command="{Binding ExitGameCommand}" />
+            </MenuItem>
+
+            <MenuItem Header="Board">
+                <MenuItem Header="Size">
+                    <MenuItem Header="Small" IsCheckable="True" IsChecked="{Binding IsGameSmall}" IsEnabled="{Binding IsGameSmallEnabled}"/>
+                    <MenuItem Header="Medium" IsCheckable="True" IsChecked="{Binding IsGameMedium}" IsEnabled="{Binding IsGameMediumEnabled}"/>
+                    <MenuItem Header="Large" IsCheckable="True" IsChecked="{Binding IsGameLarge}" IsEnabled="{Binding IsGameLargeEnabled}" />
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="Rules" Command="{Binding RulesCommand}" />
+        </Menu>
+
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0"></Grid>
+            <Grid  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Height="100" Width="200">
+                <Label Content="White player time:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40, 0, 0, 0" />
+                <Label Content="{Binding PlayerWhiteTime}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="160, 0, 0, 0" RenderTransformOrigin="5.08,5.108"/>
+            </Grid>
+
+            <Grid Grid.Column="2" Height="100" Width="80" Margin="10, 10, 10, 10">
+                <Button Command="{Binding PassCommand}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="80" Margin="0, 10, 0, 0" Content="Pass" IsEnabled="{Binding PassButtonEnabled}"/>
+                <Button Command="{Binding PauseCommand}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="80" Margin="0, 55, 0, 0" Content="{Binding PauseText}" IsEnabled="{Binding PauseButtonEnabled}"/>
+            </Grid>
+
+            <Grid  Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Height="100" Width="200">
+                <Label Content="Black player time:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40, 0, 0, 0" />
+                <Label Content="{Binding PlayerBlackTime}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="160, 0, 0, 0" RenderTransformOrigin="5.08,5.108"/>
+            </Grid>
+            <Grid Grid.Column="4"></Grid>
+        </Grid>
+
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding Fields}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button  MinWidth="20" MinHeight="20" Margin="0, 0, 0, 0" Command="{Binding PutDownCommand}" CommandParameter="{Binding Index}" Content="{Binding Text}" IsEnabled="true" Focusable="False" RenderTransformOrigin="0.5, 0.5" FontSize="12" FontWeight="Bold" BorderBrush="Gray">
+                        <Button.RenderTransform>
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </Button.RenderTransform>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding BackColorInt}" Value="10">
+                                        <Setter Property="Background" Value="Gray" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding BackColorInt}" Value="20">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding BackColorInt}" Value="30">
+                                        <Setter Property="Background" Value="Black" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TextColorInt}" Value="10">
+                                        <Setter Property="Foreground" Value="Gray" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TextColorInt}" Value="20">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TextColorInt}" Value="30">
+                                        <Setter Property="Foreground" Value="Black" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding X}" />
+                    <Setter Property="Grid.Column" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <TextBlock Text="{Binding GamePoints}" />
+                
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
