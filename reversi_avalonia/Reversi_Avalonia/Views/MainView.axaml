@@ -1,0 +1,103 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Reversi_Avalonia.ViewModels"
+             xmlns:v="clr-namespace:Reversi_Avalonia.Views"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="750"
+             x:Class="Reversi_Avalonia.Views.MainView"
+             x:DataType="vm:ReversiViewModel"
+			 d:DataContext="{x:Static v:DesignData.ViewModel}">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<WrapPanel Grid.Row="0" Orientation="Horizontal">
+			<ComboBox SelectedIndex="0">
+				<ComboBoxItem IsSelected="{Binding IsGameSmall}">Small</ComboBoxItem>
+				<ComboBoxItem IsSelected="{Binding IsGameMedium}">Medium</ComboBoxItem>
+				<ComboBoxItem IsSelected="{Binding IsGameLarge}">Large</ComboBoxItem>
+			</ComboBox>
+			<Button Command="{Binding NewGameCommand}">New</Button>
+			<Button Command="{Binding SaveGameCommand}">Save</Button>
+			<Button Command="{Binding LoadGameCommand}">Load</Button>
+			<Button Command="{Binding RulesCommand}">Rules</Button>
+
+		</WrapPanel>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<Panel Grid.Column="0" />
+
+			<Grid Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+				<Label Content="White player time:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,30,0" />
+				<Label Content="{Binding PlayerWhiteTime}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="150,0,30,0" />
+			</Grid>
+			
+			<Grid Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+				<Label Content="Black player time:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,60,30,0" />
+				<Label Content="{Binding PlayerBlackTime}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="150,60,30,0" />
+			</Grid>
+
+			<Grid Grid.Column="2" Margin="10">
+				<Button Command="{Binding PassCommand}" Content="Pass" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" IsEnabled="{Binding PassButtonEnabled}" />
+				<Button Command="{Binding PauseCommand}" Content="{Binding PauseText}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0" IsEnabled="{Binding PauseButtonEnabled}" />
+			</Grid>
+
+			<Panel Grid.Column="4" />
+		</Grid>
+		<Viewbox Grid.Row="2">
+			<ItemsControl ItemsSource="{Binding Fields}" Width="700" Height="700">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<UniformGrid Rows="{Binding ActiveTableSize}" Columns="{Binding ActiveTableSize}" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Grid>
+							<Button Margin="0"
+									HorizontalAlignment="Stretch"
+									VerticalAlignment="Stretch"
+									Command="{Binding PutDownCommand}"
+									CommandParameter="{Binding Index}"
+									Content="{Binding Text}"
+									Focusable="False"
+									Classes="MySpecialButton"
+									RenderTransformOrigin="0.5, 0.5"
+									Background="{Binding Background}" Foreground="{Binding Foreground}"
+									HorizontalContentAlignment="Center"
+									VerticalContentAlignment="Center"
+									FontSize="12" FontWeight="Bold" BorderBrush="Gray">
+								
+								<Button.RenderTransform>
+									<ScaleTransform ScaleX="1" ScaleY="1" />
+								</Button.RenderTransform>
+							</Button>
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</Viewbox>
+		<Border Grid.Row="3" BorderBrush="Black" BorderThickness="0 1 0 0">
+			<StackPanel  Orientation="Horizontal">
+				<TextBlock Text="{Binding GamePoints}" />
+			</StackPanel>
+		</Border>
+
+	</Grid>
+</UserControl>
